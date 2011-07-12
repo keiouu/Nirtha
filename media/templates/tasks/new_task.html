@@ -1,0 +1,58 @@
+{% comment %} tasks/new_task.html imported by site_base.html for modal form dialogue box in reponse to "task add" menu click {% endcomment %}
+
+<script>
+	$(function() {
+		$( "#new-task-form" ).dialog({
+			autoOpen: false,
+			modal: true,
+		});
+		$( "#new_task_form" ).submit(function() {
+			$.ajax({
+			  url: "/api/tasks/create/",
+			  cache: false,
+			  data: ({
+				 title: $('#task_title').attr("value"),
+				 description: $('#task_description').attr("value"),
+				 project:$('#task_project').attr("value"),
+				 type:$('#task_type').attr("value"),
+				 severity:$('#task_severity').attr("value")
+			  }),
+			  success: function(resp){
+			  	if (resp == "1") {
+					$( "#new-task-form" ).dialog("close");
+					window.location = window.location;
+				}
+				else
+					alert(resp);
+			  }
+			});
+			return false;
+		});
+	});
+</script>
+
+<div id="new-task-form" title="Create new task">
+	<form method="GET" id="new_task_form">
+		<fieldset>
+			<label for="title">Title</label>
+			<input type="text" name="title" id="task_title" class="text ui-widget-content ui-corner-all" />
+			<label for="type">Type</label>
+			<select name="type" id="task_type" class="select ui-widget-content ui-corner-all">
+				<option value="0">Bug</option>
+				<option value="1">Feature</option>
+				<option value="2">Enhancement</option>
+			</select>
+			<label for="severity">Severity</label>
+			<select name="severity" id="task_severity" class="select ui-widget-content ui-corner-all">
+				<option value="0">Critical</option>
+				<option value="1">High</option>
+				<option value="2" selected="1">Medium</option>
+				<option value="3">Low</option>
+			</select>
+			<input type="hidden" name="task_project" id="task_project" value="{{project.pk}}" />
+			<label for="description">Description</label>
+			<textarea name="description" id="task_description" class="text ui-widget-content ui-corner-all"></textarea>
+			<input type="submit" />
+		</fieldset>
+	</form>
+</div>

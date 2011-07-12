@@ -1,0 +1,22 @@
+body {margin: 0; color: #FFF; font-size: 62.5%; }
+
+.ui-top-menu {border: 0 !important; line-height: 0.8em; }
+.ui-top-menu img {margin: 1px;}
+.ui-top-menu p {position: relative; top: -0.8em; padding-left: 0.4em; display: inline;}
+.ui-top-menu a {text-decoration: none;}
+.ui-top-menu a:hover {text-decoration: underline;}
+
+.content {text-align: center; padding: 5em;}
+.login {margin-left: 33%; width: 33%; background-color: #1c1c1c; border: 1px #555 solid;}
+
+.ui-menu { width: 200px; position: absolute; }
+.profile-menu { width: 135px; }
+.menu-icon-text {padding-left: 1.5em !important;}
+
+label, input { display:block; }
+input.text { margin-bottom:12px; width:95%; padding: .4em; }
+fieldset { padding:0; border:0; }
+
+#loginform input {display: inline;}
+
+.grid a {text-decoration: none;}

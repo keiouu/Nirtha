@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" /> 
+		<meta http-equiv="Content-language" content="en" />
+		<title>{% firstof title "Nirtha" %} | Nirtha</title>
+		
+		<!-- These go at the top so we can override them later -->
+		<link type="text/css" href="{{MEDIA_URL}}css/jquery.ui.spinner.css" rel="stylesheet" />
+		<link type="text/css" href="{{MEDIA_URL}}css/jquery.ui.tooltip.css" rel="stylesheet" />
+		<link type="text/css" href="{{MEDIA_URL}}css/jquery.ui.menu.css" rel="stylesheet" />
+		<link type="text/css" href="{{MEDIA_URL}}css/jquery.ui.content.css" rel="stylesheet" />
+		
+		<link type="text/css" href="{{MEDIA_URL}}css/base.css" rel="stylesheet" />
+		<link type="text/css" href="{{MEDIA_URL}}css/jupiter/style.css" rel="stylesheet" />	
+		<link type="text/css" href="{{MEDIA_URL}}css/jupiter/overrides.css" rel="stylesheet" />
+		{% block extra_style %}{% endblock %}
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js"></script>
+		<script type="text/javascript" src="{{MEDIA_URL}}js/jquery-ui.js"></script>
+		<script type="text/javascript" src="{{MEDIA_URL}}js/jquery.ui.content.js"></script>
+		<script type="text/javascript" src="{{MEDIA_URL}}js/jquery.ui.grid.js"></script>
+		
+		<script type="text/javascript">
+			$(function() {
+				$("#profile_menu").button({ icons: { primary: "ui-icon-home" } });
+				{% if project or assigned_tasks|length > 0 %}
+					$("#tasks_menu").button({ icons: { secondary: "ui-icon-triangle-1-s" } });
+				{% else %}
+					$("#tasks_menu").button();
+				{% endif %}
+				$("#projects_menu").button({ icons: { secondary: "ui-icon-triangle-1-s" } });
+
+				$("#nav_bar button").each(function() {
+					$(this).next().menu({
+						select: function(event, ui) {
+							if (event.srcElement.innerHTML == "New Task") {
+								$("#new-task-form").dialog( "open" );
+								return;
+							}
+							if (event.srcElement.innerHTML == "New Project") {
+								$("#new-project-form").dialog( "open" );
+								return;
+							}
+							window.location = ui.item.children()[0].href;
+							$(this).hide();
+						}
+					}).hide();
+				});
+				
+				$("#nav_bar button").click(function(event) {
+					var menu = $(this).next();
+					if (menu.is(":visible")) {
+						menu.hide();
+						return false;
+					}
+					menu.menu("blur").show().position({
+						my: "left top",
+						at: "left bottom",
+						of: this
+					});
+					$(document).one("click", function() {
+						menu.hide();
+					});
+					return false;
+				})
+			});
+		</script>
+		
+		{% block extra_header %}{% endblock %}
+	</head>
+	<body>
+		{% block nav_bar %}
+		<!-- Note: This nav bar looks good sliding down on page load... TODO: Review -->
+		<div id="nav_bar" class="ui-widget ui-helper-reset ui-widget-content">
+			{% block user_bar %}
+			<div class="ui-top-menu ui-widget-header">
+				
+				<button id="profile_menu">Welcome {% if user.is_authenticated %}{{user}}{% else %}Anonymous{% endif %}!</button>
+				<ul class="profile-menu">
+					<li><a href="/profile/" class="menu-icon-text"><span class="ui-button-icon-primary ui-icon ui-icon-person"></span>Profile</a></li>
+					<li><a href="/profile/messages/" class="menu-icon-text"><span class="ui-button-icon-primary ui-icon ui-icon-mail-open"></span>0 Messages</a></li>
+					<li><a href="/logout/">Logout</a></li>
+				</ul>
+
+				{% if user.is_authenticated %}
+				<button id="tasks_menu">You have {{assigned_tasks|length}} tasks assigned.</button>
+				<ul>
+					{% for task in assigned_tasks %}
+						<li><a href="/projects/{{task.project.id}}/tasks/{{task.id}}/">{{task.name}}</a></li>
+					{% endfor %}
+					{% if project %}
+						<li><a href="/projects/{{project.id}}/tasks/new/">New Task</a></li>
+					{% endif %}
+				</ul>
+				{% endif %}
+
+				{% if user.is_authenticated %}
+				<button id="projects_menu">You are currently involved in {{assigned_projects|length}} projects.</button>
+				<ul>
+					{% for project in assigned_projects %}
+						<li><a href="/projects/{{project.id}}/">{{project.title}}</a></li>
+					{% endfor %}
+					<li><a href="/projects/new">New Project</a></li>
+				</ul>
+				{% endif %}
+			</div>
+			{% endblock %}
+		</div>
+		{% endblock %}
+		
+		{% if not user.is_authenticated %}
+			<div class="content login">
+				<h1>Please login</h1>
+				{% if form.errors %}
+				<p>Your username and password didn't match. Please try again.</p>
+				{% endif %}
+				<form action="/login/" method="post" id="loginform">
+					{% csrf_token %}
+					<span><label for="username">Username: </label><input name="username" id="username" /></span>
+					<p><label for="password">Password: </label><input name="password" id="password" type="password" /></p>
+					<p><input name="submit" type="submit" /></p>
+				</form>
+			</div>
+		{% else %}
+			{% block content %}{% endblock %}
+		{% endif %}
+		
+		{% if project %}
+			{% include "tasks/new_task.html" %}
+		{% endif %}
+		{% include "projects/new_project.html" %}
+	</body>
+</html>

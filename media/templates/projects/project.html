@@ -1,0 +1,31 @@
+{% extends "site-base.html" %}
+
+{% block extra_header %}
+		<script type="text/javascript">
+			$(function() {
+				$("#main_content").content();
+				$("#tasks_content").content();
+				$(".grid").grid();
+			});
+		</script>
+{% endblock %}
+
+{% block content %}
+	<div id="main_content" title="Information">
+		<div>
+			<p>Title: {{project.title}}<br />
+			   Description: {{project.description}}</p>
+			<p>This project is {{project.age}} day{% if project.age != 1 %}s{% endif %} old and was created by {{project.created_by}}. It currently has {{project.number_of_assignees}} member{% if project.number_of_assignees != 1 %}s{% endif %}.</p>
+		</div>
+	</div>
+	<div id="tasks_content" title="Tasks">
+		<div class="grid">
+			{% for task in project.tasks %}
+			<p>{{task.title}}</p>
+			{% empty %}
+			<p>No tasks!</p>
+			{% endfor %}
+			<p onclick="$('#new-task-form').dialog('open');">Create a new Task</p>
+		</div>
+	</div>
+{% endblock %}

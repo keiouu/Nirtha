@@ -1,0 +1,6 @@
+body{background-color: #000000;}
+
+.ui-grid .row-hover { background-image: url(images/ui-bg_glass_40_ffc73d_1x400.png) !important; color: #000	 !important; }
+.ui-grid .row { margin: 0; padding: .3em; background-position: 50% 50%; border-bottom: 1px solid #555555; }
+.ui-grid .row-a { background-image: url(images/ui-bg_glass_40_3e0080_1x400.png); }
+.ui-grid .row-b { background-image: url(images/ui-bg_glass_40_9552fe_1x400.png); }

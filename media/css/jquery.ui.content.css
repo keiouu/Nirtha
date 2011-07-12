@@ -1,0 +1,12 @@
+/*
+ * jQuery Content Holder CSS
+ *
+ * Copyright 2011, James Thompson
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ */
+ 
+ .ui-content { margin: 1.9em; }
+ .ui-content .ui-content-title { padding: 0.3em; font-size: 1.4em; }
+ .ui-content .ui-content-data { padding: 0.3em; }

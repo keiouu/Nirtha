@@ -1,0 +1,41 @@
+{% comment %} projects/new_project.html imported by site_base.html for modal form dialogue box in reponse to "project add" menu click {% endcomment %}
+
+<script>
+	$(function() {
+		$( "#new-project-form" ).dialog({
+			autoOpen: false,
+			modal: true,
+		});
+		$( "#new_project_form" ).submit(function() {
+			$.ajax({
+			  url: "/api/projects/create/",
+			  cache: false,
+			  data: ({
+			     title: $('#project_title').attr("value"),
+			     description: $('#project_description').attr("value"),
+			  }),
+			  success: function(resp){
+			  	if (resp == "1") {
+					$( "#new-project-form" ).dialog("close");
+					window.location = window.location;
+				}
+				else
+					alert(resp);
+			  }
+			});
+			return false;
+		});
+	});
+</script>
+
+<div id="new-project-form" title="Create new project">
+	<form action="" method="GET" id="new_project_form">
+		<fieldset>
+			<label for="project_title">Title</label>
+			<input type="text" name="title" id="project_title" class="text ui-widget-content ui-corner-all" />
+			<label for="project_description">Description</label>
+			<textarea name="description" id="project_description" class="text ui-widget-content ui-corner-all"></textarea>
+			<input type="submit" value="Create" />
+		</fieldset>
+	</form>
+</div>

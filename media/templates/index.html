@@ -1,0 +1,22 @@
+{% extends "site-base.html" %}
+
+{% block extra_header %}
+		<script type="text/javascript">
+			$(function() {
+				$("#main_content").content();
+				$(".grid").grid();
+			});
+		</script>
+{% endblock %}
+
+{% block content %}
+	<div id="main_content" title="Whats New?">
+		<div class="grid">
+			{% for new in whats_new %}
+			<p><a href="{{new.url}}">{{new}}</a></p>
+			{% empty %}
+			<p>Nothing has happened yet</p>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}
